@@ -1,4 +1,5 @@
 import {
+    BaseParameters,
     PingQuery,
     FindNodeParameters,
     FindNodeQuery,
@@ -32,7 +33,9 @@ export class Query {
         };
     }
 
-    public find_node(a: Omit<FindNodeParameters, "id">): FindNodeQuery {
+    public find_node(
+        a: Omit<FindNodeParameters, keyof BaseParameters>
+    ): FindNodeQuery {
         return {
             t: this.t,
             y: "q",
@@ -44,7 +47,9 @@ export class Query {
         };
     }
 
-    public get_peers(a: Omit<GetPeersParameters, "id">): GetPeersQuery {
+    public get_peers(
+        a: Omit<GetPeersParameters, keyof BaseParameters>
+    ): GetPeersQuery {
         return {
             t: this.t,
             y: "q",
@@ -57,7 +62,7 @@ export class Query {
     }
 
     public announce_peer(
-        a: Omit<AnnouncePeerParameters, "id">
+        a: Omit<AnnouncePeerParameters, keyof BaseParameters>
     ): AnnouncePeerQuery {
         return {
             t: this.t,
