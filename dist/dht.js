@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var crypto = require("crypto");
+var dgram = require("dgram");
+var buffer_1 = require("buffer");
+var bencode_1 = require("@lemontv/bencode");
+var query_1 = require("./query");
+var BOOTSTRAP_HOST = "router.bittorrent.com";
+var BOOTSTRAP_PORT = 6881;
+var buf = crypto.randomBytes(2048);
+var sha1 = crypto.createHash("sha1");
+sha1.update(buf);
+var token = sha1.digest().toString("ascii");
+var query = new query_1.Query(token);
+var server = dgram.createSocket("udp4");
+server.on("message", function (message) {
+    console.log(bencode_1.decode(message));
+});
+var ping = buffer_1.Buffer.from(bencode_1.encode(query.ping()));
+server.send(ping, BOOTSTRAP_PORT, BOOTSTRAP_HOST);

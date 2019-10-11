@@ -1,6 +1,6 @@
 import { Response } from "../src";
 
-describe("Query class", () => {
+describe("Response class", () => {
     const token = "token-2";
     const response = new Response(token);
     const t = "aa";
