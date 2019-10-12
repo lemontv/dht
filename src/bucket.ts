@@ -1,4 +1,5 @@
 import { IBucket } from "./types";
+import { Buffer } from "buffer";
 
 export class Bucket implements IBucket {
     public contacts: Buffer[];
@@ -18,6 +19,18 @@ export class Bucket implements IBucket {
         this.rightBound = rightBound;
         this.k = k;
         this.contacts = [...contacts];
+    }
+
+    public compare(token: Buffer) {
+        if (Buffer.compare(token, this.leftBound) < 0) {
+            return -1;
+        }
+
+        if (Buffer.compare(token, this.rightBound) >= 0) {
+            return 1;
+        }
+
+        return 0;
     }
 
     public match(token: Buffer) {

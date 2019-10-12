@@ -10,6 +10,45 @@ describe("Bucket class", () => {
         rightBound = Buffer.alloc(20).fill(0xff);
     });
 
+    describe("compare()", () => {
+        it("should return 0", () => {
+            leftBound[0] = 0x80;
+            const b1 = new Bucket(leftBound, rightBound);
+            const token = Buffer.alloc(20).fill(0x00);
+
+            token[0] = 0xff;
+            expect(b1.compare(token)).toEqual(0);
+
+            token[0] = 0x80;
+            expect(b1.compare(token)).toEqual(0);
+
+            token[0] = 0x8f;
+            expect(b1.compare(token)).toEqual(0);
+        });
+
+        it("should return -1", () => {
+            leftBound[0] = 0x80;
+            const b1 = new Bucket(leftBound, rightBound);
+            const token = Buffer.alloc(20).fill(0x00);
+
+            token[0] = 0x0f;
+            expect(b1.compare(token)).toEqual(-1);
+        });
+
+        it("should return 1", () => {
+            rightBound.fill(0x00);
+            rightBound[0] = 0x80;
+            const b1 = new Bucket(leftBound, rightBound);
+            const token = Buffer.alloc(20).fill(0x00);
+
+            token[0] = 0xff;
+            expect(b1.compare(token)).toEqual(1);
+
+            token[0] = 0x80;
+            expect(b1.compare(token)).toEqual(1);
+        });
+    });
+
     describe("match()", () => {
         it("should return truthy", () => {
             rightBound[0] = 0x80;
