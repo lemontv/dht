@@ -114,27 +114,51 @@ describe("Bucket class", () => {
 
     describe("split()", () => {
         it("should be able to throw a error", () => {
+            const token = Buffer.alloc(20).fill(0x00);
             const b1 = new Bucket(leftBound, rightBound);
             b1.canSplit = false;
-            expect(() => b1.split()).toThrow();
+            expect(() => b1.split(token)).toThrow();
 
             const b2 = new Bucket(leftBound, leftBound);
-            expect(() => b2.split()).toThrow();
+            expect(() => b2.split(token)).toThrow();
         });
 
         it("should be return new bucket", () => {
+            const token = Buffer.alloc(20).fill(0x88);
             const t1 = Buffer.alloc(20).fill(0x01);
             const t2 = Buffer.alloc(20).fill(0x02);
             const t3 = Buffer.alloc(20).fill(0xf0);
 
             const b1 = new Bucket(leftBound, rightBound, 20, [t1, t2, t3]);
-            const b2 = b1.split();
+            const b2 = b1.split(token);
 
             expect(b2.match(t3)).toBeTruthy();
             expect(b1.contacts).toHaveLength(2);
             expect(b1.contacts).toEqual([t1, t2]);
             expect(b2.contacts).toHaveLength(1);
             expect(b2.contacts).toEqual([t3]);
+            expect(b1.canSplit).toBeFalsy();
+            expect(b2.canSplit).toBeTruthy();
+
+            const b3 = b2.split(token);
+            expect(b2.canSplit).toBeTruthy();
+            expect(b3.canSplit).toBeFalsy();
+        });
+    });
+
+    describe("remove()", () => {
+        it("should be able to remove a token", () => {
+            const t1 = Buffer.alloc(20).fill(0x01);
+            const t2 = Buffer.alloc(20).fill(0x02);
+            const t3 = Buffer.alloc(20).fill(0xf0);
+            const b1 = new Bucket(leftBound, rightBound, 20, [t1, t2]);
+
+            b1.remove(t3);
+            expect(b1.contacts).toHaveLength(2);
+            expect(b1.contacts).toEqual([t1, t2]);
+            b1.remove(t1);
+            expect(b1.contacts).toHaveLength(1);
+            expect(b1.contacts).toEqual([t2]);
         });
     });
 });

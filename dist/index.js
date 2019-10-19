@@ -3,5 +3,7 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
+var bucket_1 = require("./bucket");
+exports.Bucket = bucket_1.Bucket;
 __export(require("./query"));
 __export(require("./response"));

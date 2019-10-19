@@ -33,9 +33,7 @@ export class Query {
         };
     }
 
-    public find_node(
-        a: Omit<FindNodeParameters, keyof BaseParameters>
-    ): FindNodeQuery {
+    public find_node(a: FindNodeParameters): FindNodeQuery {
         return {
             t: this.t,
             y: "q",
@@ -47,9 +45,7 @@ export class Query {
         };
     }
 
-    public get_peers(
-        a: Omit<GetPeersParameters, keyof BaseParameters>
-    ): GetPeersQuery {
+    public get_peers(a: GetPeersParameters): GetPeersQuery {
         return {
             t: this.t,
             y: "q",
@@ -61,9 +57,7 @@ export class Query {
         };
     }
 
-    public announce_peer(
-        a: Omit<AnnouncePeerParameters, keyof BaseParameters>
-    ): AnnouncePeerQuery {
+    public announce_peer(a: AnnouncePeerParameters): AnnouncePeerQuery {
         return {
             t: this.t,
             y: "q",

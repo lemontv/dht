@@ -5,17 +5,14 @@ declare enum impliedPort {
     Disabled = 1,
 }
 
-interface BaseParameters {
-    id: string;
-}
-export interface PingParameters extends BaseParameters {}
-export interface FindNodeParameters extends BaseParameters {
+export interface PingParameters {}
+export interface FindNodeParameters {
     target: string;
 }
-export interface GetPeersParameters extends BaseParameters {
+export interface GetPeersParameters {
     info_hash: string;
 }
-export interface AnnouncePeerParameters extends BaseParameters {
+export interface AnnouncePeerParameters {
     implied_port: impliedPort;
     info_hash: string;
     port: number;

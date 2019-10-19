@@ -2,12 +2,12 @@ import { IBucket } from "./types";
 import { Buffer } from "buffer";
 
 export class Bucket implements IBucket {
+    public leftBound: Buffer;
+    public rightBound: Buffer;
     public contacts: Buffer[];
     public canSplit: boolean = true;
 
     private k: number;
-    private leftBound: Buffer;
-    private rightBound: Buffer;
 
     constructor(
         leftBound: Buffer,
@@ -49,7 +49,7 @@ export class Bucket implements IBucket {
         }
     }
 
-    public split() {
+    public split(token: Buffer) {
         if (
             !this.canSplit ||
             Buffer.compare(this.leftBound, this.rightBound) >= 0
@@ -57,10 +57,15 @@ export class Bucket implements IBucket {
             throw new Error("Can not split this bucket");
         }
 
-        this.canSplit = false;
-
         const midBound = mid(this.leftBound, this.rightBound);
         const bucket = new Bucket(midBound, this.rightBound);
+
+        if (bucket.match(token)) {
+            this.canSplit = false;
+        } else {
+            bucket.canSplit = false;
+        }
+
         this.rightBound = midBound;
 
         this.contacts = this.contacts.filter(
@@ -69,9 +74,15 @@ export class Bucket implements IBucket {
 
         return bucket;
     }
+
+    public remove(token: Buffer) {
+        this.contacts = this.contacts.filter(
+            (contact) => Buffer.compare(token, contact) !== 0
+        );
+    }
 }
 
-export function mid(leftBound: Buffer, rightBound: Buffer) {
+export function mid(leftBound: Buffer, rightBound: Buffer): Buffer {
     if (leftBound.length !== rightBound.length) {
         throw new Error("Not the same length of two buffer");
     }
