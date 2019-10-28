@@ -3,6 +3,7 @@ import { Query as IQuery } from "./query";
 export * from "./bucket";
 export * from "./response";
 export * from "./query";
+export * from "./tree";
 
 type IPFamily = "IPv4" | "IPv6";
 export interface RemoteAddressInfo {
@@ -12,16 +13,21 @@ export interface RemoteAddressInfo {
     size: number;
 }
 
-export type Request = { query: IQuery; host: string; port: number };
+export interface Request {
+    query: IQuery;
+    host: string;
+    port: number;
+}
+
 export interface Requests {
     [t: string]: Request;
 }
 
-export type Contact = {
+export interface Contact {
     host: string;
     port: number;
     lastAt: number;
-};
+}
 export interface Contacts {
     [t: string]: Contact;
 }

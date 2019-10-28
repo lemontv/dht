@@ -153,6 +153,7 @@ describe("Bucket class", () => {
             const t3 = Buffer.alloc(20).fill(0xf0);
             const b1 = new Bucket(leftBound, rightBound, 20, [t1, t2]);
 
+            expect(b1.contacts).toHaveLength(2);
             b1.remove(t3);
             expect(b1.contacts).toHaveLength(2);
             expect(b1.contacts).toEqual([t1, t2]);
