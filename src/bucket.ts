@@ -77,7 +77,7 @@ export class Bucket implements IBucket {
 
     public remove(token: Buffer) {
         this.contacts = this.contacts.filter(
-            (contact) => Buffer.compare(token, contact) !== 0
+            (contact) => token.toString() !== contact.toString()
         );
     }
 }

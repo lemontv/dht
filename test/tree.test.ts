@@ -112,7 +112,7 @@ describe("Tree class", () => {
     });
 
     it("remove()", () => {
-        const contacts = 10;
+        const contacts = 12;
 
         for (let i = 0; i < contacts; i++) {
             const tk = Buffer.alloc(20);
@@ -149,7 +149,7 @@ describe("Tree class", () => {
         expect(Object.keys(tree.contacts)).toHaveLength(contacts + 1);
         expect(tree.buckets[0].contacts).toHaveLength(contacts + 1);
 
-        const lastAt = new Date().getTime() - 16 * 60;
+        const lastAt = new Date().getTime() - 20 * 60;
         tree.contacts[t.toString("ascii")].lastAt = lastAt;
         tree.clean();
 

@@ -7,7 +7,7 @@ export interface ITree {
     contacts: Contacts;
 
     findBucket: (token: Buffer) => number;
-    store: (token: Buffer, contact: Omit<Contact, "lastAt">) => void;
+    store: (token: Buffer, contact: Pick<Contact, "host" | "port">) => void;
     remove: (token: Buffer) => void;
     clean: () => void;
 }

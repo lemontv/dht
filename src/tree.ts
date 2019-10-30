@@ -40,11 +40,12 @@ export class Tree implements ITree {
         return -1;
     }
 
-    public store(token: Buffer, contact: Omit<Contact, "lastAt">) {
+    public store(token: Buffer, contact: Pick<Contact, "port" | "host">) {
         const t = token.toString(encoding);
         if (this.contacts[t]) {
             this.contacts[t] = {
                 ...contact,
+                token,
                 lastAt: new Date().getTime(),
             };
         } else {
@@ -56,6 +57,7 @@ export class Tree implements ITree {
             if (status) {
                 this.contacts[t] = {
                     ...contact,
+                    token,
                     lastAt: new Date().getTime(),
                 };
                 if (
@@ -63,9 +65,7 @@ export class Tree implements ITree {
                     this.buckets[i].canSplit
                 ) {
                     const bucket = this.buckets[i].split(this.TOKEN);
-                    const pos = bucket.match(this.buckets[i].leftBound)
-                        ? i
-                        : i + 1;
+                    const pos = i + 1;
                     this.buckets.splice(pos, 0, bucket);
                 }
             }
@@ -79,9 +79,11 @@ export class Tree implements ITree {
     }
 
     public clean() {
-        const n = new Date().getTime();
-        Object.entries(this.contacts)
-            .filter(([, v]) => n - v.lastAt > 15 * 60)
-            .forEach(([k]) => this.remove(Buffer.from(k, encoding)));
+        const now = new Date().getTime();
+        Object.values(this.contacts)
+            .filter((contact) => now - contact.lastAt > 15 * 60)
+            .forEach((contact) => {
+                this.remove(contact.token);
+            });
     }
 }

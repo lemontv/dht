@@ -24,6 +24,7 @@ export interface Requests {
 }
 
 export interface Contact {
+    token: Buffer;
     host: string;
     port: number;
     lastAt: number;
